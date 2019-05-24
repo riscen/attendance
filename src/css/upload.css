@@ -1,0 +1,50 @@
+/*******************Upload****************/
+.upload-file-props {
+  border-bottom: 1px solid #dbdbdb;
+  padding-top: 10px;
+}
+
+.upload-file-title {
+  font-size: 26px;
+}
+
+.upload-file-props th,
+.upload-file-props td {
+  font-size: 16px;
+}
+
+.upload-file-props td {
+  cursor: pointer;
+}
+
+.upload-file-props tbody > tr:hover {
+  color: #007bff;
+}
+
+.upload-file-name-cell {
+  width: 40%;
+}
+
+.upload-file-size-cell {
+  width: 15%;
+}
+
+.upload-file-date-cell {
+  width: 15%;
+}
+
+.upload-file-button-group {
+  text-align: center;
+}
+
+.upload-file-dnd-container {
+  padding-top: 15px;
+}
+
+.upload-dnd {
+  text-align: center;
+}
+
+.upload-dnd-label {
+  font-size: 16px;
+}

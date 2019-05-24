@@ -1,0 +1,14 @@
+.calendar-admin-panel-container {
+  padding: 10px 0 10px 0;
+  border-bottom: 1px solid #bdbdbd;
+}
+
+.calendar-admin-choose {
+  text-align: right;
+  font-size: 18px;
+}
+
+.calendar-admin-msg {
+  padding: 5px;
+  text-align: center;
+}

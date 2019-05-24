@@ -1,0 +1,52 @@
+.calendar-search-container {
+  height: 50vh;
+  padding: 2% 5% 0 5% !important;
+}
+
+.calendar-search-panel-container {
+  padding-bottom: 5px;
+}
+
+.calendar-search-panel-container input {
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  border: 1px solid #dee2e6;
+  background: white;
+  padding: 10px;
+}
+
+.calendar-search-emp-row {
+  cursor: pointer;
+}
+
+.calendar-search-emp-row:hover {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.calendar-search-emp-row.active {
+  color: #006add;
+  font-weight: bold;
+}
+
+.calendar-search-no-cell {
+  width: 5%;
+}
+
+.calendar-search-name-cell,
+.calendar-search-email-cell {
+  width: 37%;
+}
+
+.calendar-search-sapid-cell {
+  width: 20%;
+}
+
+.calendar-search-pagination {
+  margin: auto;
+}
+
+.calendar-page-active {
+  background: #dbdbdb !important;
+}

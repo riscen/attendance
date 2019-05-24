@@ -1,0 +1,139 @@
+.non-selectable-text {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/************Calendar**************/
+.calendar-container {
+  height: 90vh;
+}
+
+.calendar-title {
+  height: 90px;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.calendar-user-data {
+  float: left;
+}
+
+.calendar-time {
+  float: right;
+  text-align: right;
+}
+
+.calendar-year,
+.calendar-month {
+  cursor: pointer;
+}
+
+.calendar-year:hover,
+.calendar-month:hover {
+  color: #007bff;
+}
+
+.calendar-button-group {
+  text-align: right;
+}
+
+/********Calendar month*******/
+.calendar-table-header-cell {
+  width: 14%;
+}
+
+/********Calendar day*******/
+.caledar-table-day-cell {
+  height: 100px;
+  font-size: 20px;
+}
+
+.caledar-table-day-cell.clickable-cell {
+  -moz-transition: color 0.1s;
+  -ms-transition: color 0.1s;
+  -o-transition: color 0.1s;
+  -webkit-transition: color 0.1s;
+  transition: color 0.1s;
+  cursor: pointer;
+}
+
+.selected-cell {
+  background: #e5f1ff;
+}
+
+.caledar-table-day-cell.clickable-cell:hover {
+  color: #007bff;
+}
+
+.caledar-table-day-cell.day-disable {
+  background: #dee2e6;
+}
+
+.calendar-day-name {
+  font-size: 14px;
+}
+
+.calendar-day-type {
+  float: right;
+  text-align: right;
+  font-size: 36px;
+}
+
+.caledar-table-day-cell.S {
+  color: #00f;
+}
+
+.caledar-table-day-cell.NS {
+  color: #008;
+}
+
+.caledar-table-day-cell.MS {
+  color: #7575ff;
+}
+
+.caledar-table-day-cell.H {
+  color: #f79400;
+}
+
+.caledar-table-day-cell.O {
+  color: #f00;
+}
+
+.caledar-table-day-cell.V {
+  color: #0daf00;
+}
+
+.caledar-table-day-cell.G {
+  color: #7a7400;
+}
+
+.caledar-table-day-cell.T {
+  color: #2e003a;
+}
+
+.caledar-table-day-cell.SUS {
+  color: #a300af;
+}
+
+/*************Calendar modal************/
+.calendar-modal-symbol {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.calendar-modal-name {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.calendar-modal-description {
+  font-size: 16px;
+  height: 100px;
+}
+
+.calendar-loading {
+  text-align: center;
+  margin: auto;
+}

@@ -1,0 +1,164 @@
+@charset "UTF-8";
+.download-description {
+  width: 100%;
+}
+
+.el-inline {
+  display: inline-block;
+}
+
+/*********************Download filters**********************/
+.download-filter {
+  -moz-transition: height 0.2s;
+  -ms-transition: height 0.2s;
+  -o-transition: height 0.2s;
+  -webkit-transition: height 0.2s;
+  transition: height 0.2s;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  border: 1px solid #dbdbdb;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.download-filter.active {
+  height: 100px;
+}
+
+.download-filter-title {
+  font-size: 16px;
+  height: 30px;
+  cursor: pointer;
+  width: 100%;
+  margin: auto;
+  padding-top: 3px;
+  border-bottom: 2px solid #dbdbdb;
+}
+
+.download-filter-title:hover {
+  color: #007bff;
+}
+
+.download-filter-grow {
+  -moz-transition: height 0.1s;
+  -ms-transition: height 0.1s;
+  -o-transition: height 0.1s;
+  -webkit-transition: height 0.1s;
+  transition: height 0.1s;
+  height: 0;
+  overflow: hidden;
+}
+
+.download-filter-wrapper {
+  height: 400px;
+  width: 100%;
+}
+
+.download-filter-field-container {
+  float: left;
+  height: 69px;
+  padding: 5px;
+}
+
+.download-filter-field-container input {
+  width: 100%;
+  padding: 5px !important;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: 1px solid #f1f1f1;
+  background: white !important;
+}
+
+.download-filter-user-container {
+  width: 22%;
+  border-right: 1px solid #dbdbdb;
+}
+
+.download-filter-label {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.download-filter-input-field {
+  width: 100%;
+}
+
+.DayPickerInput input {
+  width: 100%;
+}
+
+.download-filter-time-period-container {
+  width: 34%;
+  border-right: 1px solid #dbdbdb;
+}
+
+.InputFromTo {
+  width: 100%;
+}
+
+.download-from-date {
+  width: 50%;
+}
+
+.download-to-date {
+  width: 50%;
+}
+
+.month-picker {
+  width: 100%;
+}
+
+.InputFromTo input {
+  width: 95%;
+}
+
+.download-filter-from {
+  width: 100%;
+}
+
+.download-filter-uploaded-by-container {
+  width: 22%;
+  border-right: 1px solid #dbdbdb;
+}
+
+.download-filter-upload-date-container {
+  width: 22%;
+}
+
+.DayPickerInput {
+  width: 100%;
+}
+
+/***********************File table************************/
+.file-download-table {
+  padding: 10px 0 5% 0;
+  font-size: 16px;
+}
+
+thead {
+  background: #cdd9e6;
+  color: #212529;
+}
+
+.table-bordered .file-download-table-row {
+  -moz-transition: 0.2s;
+  -ms-transition: 0.2s;
+  -o-transition: 0.2s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.table-bordered .file-download-table-row:hover {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.file-download-table-cell {
+  width: 20%;
+}
+
+.button-container {
+  text-align: center;
+}

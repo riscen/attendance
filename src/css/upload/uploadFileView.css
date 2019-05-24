@@ -1,0 +1,60 @@
+.modal-table-container {
+    height: 400px;
+}
+
+.modal-table-header {
+    margin-bottom: 0;
+}
+
+.modal-table-content {
+    height: 350px;
+    overflow: auto;
+    margin-top: 0;
+}
+
+.modal-table-content tr {
+    -moz-transition: 0.1s;
+    -ms-transition: 0.1s;
+    -o-transition: 0.1s;
+    -webkit-transition: 0.1s;
+    transition: 0.1s;
+    cursor: pointer;
+}
+
+.modal-table-content tr:hover {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.upload-hour-modal-batch-cell {
+    width: 20%;
+}
+
+.upload-hour-modal-name-cell {
+    width: 80%;
+}
+
+.upload-hour-modal-general-data {
+    height: 235px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.upload-hour-modal-general-data input {
+    height: 30px !important;
+    padding: 0 !important;
+    margin: 0;
+}
+
+.upload-hour-modal-period {
+    width: 100%;
+}
+
+.upload-hour-modal-period input {
+    display: inline-block !important;
+    width: 48% !important;
+}
+
+.upload-hour-modal-chart {
+    
+    width: 100%
+}

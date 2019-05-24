@@ -1,0 +1,71 @@
+.upload-file-props {
+  border-bottom: 1px solid #dbdbdb;
+  padding-top: 10px;
+}
+
+.upload-file-title {
+  font-size: 26px;
+}
+
+.upload-file-props th,
+.upload-file-props td {
+  font-size: 16px;
+}
+
+.upload-file-props tbody > tr:hover {
+  -moz-transition: 0.1s;
+  -ms-transition: 0.1s;
+  -o-transition: 0.1s;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.upload-hour-file-name-cell,
+.upload-hour-file-department-cell {
+  width: 20%;
+}
+
+.upload-hour-file-size-cell,
+.upload-hour-file-emp-cell {
+  width: 10%;
+}
+
+.upload-hour-file-date-cell {
+  width: 11%;
+}
+
+.upload-user-file-name-cell {
+  width: 50%;
+}
+
+.upload-user-file-size-cell,
+.upload-user-file-emp-cell {
+  width: 10%;
+}
+
+.upload-file-button-group {
+  text-align: center;
+}
+
+.upload-file-dnd-container {
+  padding-top: 15px;
+}
+
+.upload-dnd {
+  text-align: center;
+}
+
+.upload-dnd-label {
+  font-size: 16px;
+}
+
+.upload-files-button {
+  text-align: center;
+  margin: 10px;
+}
+
+.upload-file-table-btn {
+  width: 30% !important;
+}

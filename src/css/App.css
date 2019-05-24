@@ -1,0 +1,239 @@
+.App {
+  height: 100vh;
+  display: flex;
+}
+
+.App__Form {
+ width: 100%;
+}
+
+
+.FormCenter {
+  margin-bottom: 100px;
+}
+
+.FormTitle {
+  color: #707C8B;
+  font-weight: 300;
+  position: absolute;
+  left:32%;
+  
+}
+
+.error-message {
+  background-color: #ff7272;
+  color: white;
+  padding: 1em;
+  width: 85%;
+  text-align: center;
+}
+
+.FormTitle__Link {
+  color: rgb(18, 99, 199);
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.7em;
+  margin: 0 10px;
+  padding-bottom: 5px;
+}
+
+.FormTitle__Link:first-child {
+  margin-left: 0;
+}
+
+.FormTitle__Link--Active {
+  color: black;
+  border-bottom: 1px solid #199087;
+}
+
+
+ .FormField {
+  margin-bottom: 40px;
+} 
+ .FormFields {
+  position:absolute;
+  width: 50%;
+  left: 32%;
+} 
+
+.FormField__Label {
+  display: block;
+  text-transform: uppercase;
+  font-size: .9em;
+  color: black;
+}
+.FormField__Input {
+  width: 85%;
+  background-color: transparent;
+  border: none;
+  color: black;
+  outline: none;
+  border-bottom: 1px solid black;
+  font-size: 1em;
+  font-weight: 300;
+  padding-bottom: 10px;
+  margin-top: 10px;
+}
+
+.FormField__Input::placeholder {
+  color: black;
+}
+
+.FormField__Button {
+  background-color: #52C4B9;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 25px;
+  padding: 15px 70px;
+  font-size: .8em;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.FormField__Link {
+  color: black;
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: 1.5px solid #225E62;
+  padding-bottom: 5px;
+}
+
+.card-panel red darken-4 error
+{
+  background-color: red;
+  color: white;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=number] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+.password{
+   width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+.password:focus{
+  background-color: #ddd;
+    outline: none;
+}
+
+input[type=projectname] {
+    width: 50%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+#sapid{
+  width: 50%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+#batchs, #projectkey{
+   width: 45%;
+    padding: 15px;
+    position: sticky;
+    left: 55%;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+}
+
+
+input[type=text]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+
+/* Set a style for all buttons */
+.signupbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 10px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 50%;
+    opacity: 0.9;
+}
+
+button:hover {
+    opacity:1;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+    padding: 14px 20px;
+    background-color: #f44336;
+    color: white;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 50%;
+    opacity: 0.9;
+}
+
+
+/* Add padding to container elements */
+.container {
+    padding: 2%;
+}
+
+/* Clear floats */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;    
+}
+
+/* Change styles for cancel button and signup button on extra small screens */
+@media screen and (max-width: 300px) {
+    .cancelbtn, .signupbtn {
+       width: 100%;
+    }
+}
+.CreateAccount{
+  color: #707C8B;
+  margin-left: 22%;
+  margin-top: 1%;
+}
+#batch{
+  margin-left: 51.2%;
+}
+
+#projectKey{
+  margin-left: 47.2%;
+}
+
+.MessageError{
+  color: red;
+}
+.MessageErrors{
+  color: red;
+  margin-left: 55%;
+  margin-top: -1%;
+}
+
+#delete{
+  margin-left: 50px;
+  margin-top:  -30px;
+}
