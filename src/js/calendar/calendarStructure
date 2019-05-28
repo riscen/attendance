@@ -1,0 +1,33 @@
+<calendarPage>
+    <calendarHeader>
+        <userInfo />
+        <calendarControls />
+    </calendarHeader>
+    <calendarBody>
+        <calendar />
+        <calendarButtons />
+    </calendarBody>
+</calendarPage>
+
+
+calendar: Table, each cell represents a day in the calendar. Dynamic component.
+
+Process
+At component mount:
+    Ask for holidays (response is an object)
+    Ask for employee calendars (response is an array)
+
+After getting both data fill calendar and its controls.
+
+Add two future calendars in calendars response.
+Each calendar should have a boolean field: readonly
+    if is true then the calendar is not editable
+    else can be edited
+
+The only months editable are:
+    first past month
+    actual month
+    future months
+
+Change calendarControls to arrows and not dropdowns. Is easier for user and for calculations
+Refactor all the code

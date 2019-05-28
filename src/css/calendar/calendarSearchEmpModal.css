@@ -16,6 +16,10 @@
   padding: 10px;
 }
 
+.calendar-search-panel-sorting-option {
+  padding: 0 !important;
+}
+
 .calendar-search-emp-row {
   cursor: pointer;
 }

@@ -17,6 +17,8 @@ import {
 import { get } from "../axios/";
 import { TOTAL_EMPS_PER_PAGE, GET_EMPLOYEES_URL } from "../../constants/util";
 
+import { employees } from "../../../responses/allUsers";
+
 import "../../css/calendar/calendarSearchEmpModal.css";
 
 class CalendarSearchEmpModal extends Component {
@@ -27,108 +29,188 @@ class CalendarSearchEmpModal extends Component {
       currentPage: 1,
       employees: [],
       filterText: "",
+      filteredEmployees: [],
       selectedEmployee: null,
       showWarning: false,
+      sortingOption: "name",
       totalPages: 0
     };
-
-    this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
-    this.selectEmployee = this.selectEmployee.bind(this);
-    this.changePage = this.changePage.bind(this);
-    this.changeNextPage = this.changeNextPage.bind(this);
-    this.changePrevPage = this.changePrevPage.bind(this);
-    this.accept = this.accept.bind(this);
   }
 
-  changeTotalPages(totalEmployees) {
+  /** @abstract Filters and sorts the employees with the given filter text and sorting option.
+   * @param {string} filterText String which is going to be used to filter all the employess
+   * @param {string} srotingOption String wihch determines how the employees are going to be sorted.
+   */
+  filterAndSortEmployees = (filterText, sortingOption) => {
+    const employeesArr = this.state.employees ? this.state.employees : [];
+    const sortedEmployees = employeesArr.sort((emp1, emp2) => {
+      switch (sortingOption) {
+        case "name":
+          if (emp1.employeeName < emp2.employeeName) {
+            return -1;
+          } else if (emp1.employeeName > emp2.employeeName) {
+            return 1;
+          }
+          return 0;
+        case "sapid":
+          if (emp1.sapId < emp2.sapId) {
+            return -1;
+          } else if (emp1.sapId > emp2.sapId) {
+            return 1;
+          }
+          return 0;
+        default:
+          return 0;
+      }
+    });
+    const lowerFilterText = filterText.toLowerCase();
+    const employees = sortedEmployees.filter(
+      employee =>
+        lowerFilterText === "" ||
+        (lowerFilterText !== "" &&
+          (employee.employeeName.toLowerCase().includes(lowerFilterText) ||
+            employee.sapId.includes(lowerFilterText) ||
+            employee.email.toLowerCase().includes(lowerFilterText)))
+    );
+    if (
+      this.state.totalPages !==
+      Math.ceil(employees.length / TOTAL_EMPS_PER_PAGE)
+    ) {
+      this.changeTotalPages(employees.length);
+    }
+    this.setState({
+      filteredEmployees: employees
+    });
+  };
+
+  /** @abstract Updates states's totalPages field depending on the total of employees.
+   * @param {number} totalEmployees Number of employees
+   */
+  changeTotalPages = totalEmployees => {
     this.setState({
       totalPages: Math.ceil(totalEmployees / TOTAL_EMPS_PER_PAGE),
       currentPage: 1
     });
-  }
+  };
 
-  handleFilterTextChange(event) {
+  /** @abstract Updates states's filterText and calls filterAndSortEmployees method to filter the employees.
+   * @param {object} event Event object
+   */
+  handleFilterTextChange = event => {
+    this.filterAndSortEmployees(event.target.value, this.state.sortingOption);
     this.setState({
-      [event.target.name]: event.target.value
+      filterText: event.target.value
     });
-  }
+  };
 
-  selectEmployee(employee) {
+  /** @abstract Updates states's sortingOption and calls filterAndSortEmployees method to sort the employees.
+   * @param {object} event Event object
+   */
+  onSortingOptionChange = event => {
+    this.filterAndSortEmployees(this.state.filterText, event.target.value);
     this.setState({
-      selectedEmployee: employee
+      sortingOption: event.target.value
     });
-  }
+  };
 
-  changePage(page) {
+  /** @abstract Updates states's selectedEmployee
+   * @param {object} employee Selected employee
+   */
+  selectEmployee = employee => {
+    this.setState({
+      selectedEmployee: employee,
+      showWarning: this.state.showWarning ? false : true
+    });
+  };
+
+  /** @abstract Used to navigate between employee pages.
+   * Updates states's currentPage.
+   * @param {number} page Page number to navigate to.
+   */
+  changePage = page => {
     if (page >= 1 && page <= this.state.totalPages) {
       this.setState({
         currentPage: page
       });
     }
-  }
+  };
 
-  changeNextPage() {
+  /** @abstract Used to navigate to the next page of employee pages.
+   */
+  changeNextPage = () => {
     this.changePage(this.state.currentPage + 1);
-  }
+  };
 
-  changePrevPage() {
+  /** @abstract Used to navigate to the previoud page of employee pages.
+   */
+  changePrevPage = () => {
     this.changePage(this.state.currentPage - 1);
-  }
+  };
 
-  accept() {
+  /** @abstract Closes modal if an employee is selected, otherwise shows a warning.
+   */
+  accept = () => {
     if (this.state.selectedEmployee !== null) {
-      this.props.toggle();
       this.props.selectEmployee(this.state.selectedEmployee);
+      this.props.toggle();
     } else {
       this.setState({ showWarning: true });
     }
-  }
+  };
 
-  componentWillMount() {
+  /** @abstract Fetches employees to the server.
+   */
+  componentWillMount = () => {
     //Do a request to get all the employees
-    get(GET_EMPLOYEES_URL)
-        .then(res =>{
-          let employees = [];
-          if(res && typeof(res.data) != "undefined"){
-            employees = res.data;
-          } 
-          this.changeTotalPages(employees.length);
-          this.setState({
-            employees: employees
-          });
-      });
-  }
-
-  render() {
-    const props = this.props;
-    const filterText = this.state.filterText;
-    const employees = this.state.employees.filter(
-      employee =>
-        filterText === "" ||
-        (filterText !== "" &&
-          (employee.name.includes(filterText) ||
-            employee.sapId.includes(filterText) ||
-            employee.email.includes(filterText)))
-    );
-    if (this.state.totalPages !== Math.ceil(employees.length / TOTAL_EMPS_PER_PAGE)) {
+    /*get(GET_EMPLOYEES_URL).then(res => {
+      let employees = [];
+      if (res && typeof res.data != "undefined") {
+        employees = res.data;
+      }
       this.changeTotalPages(employees.length);
-    }
+      this.setState({
+        employees: employees
+      });
+    });*/
+    //console.log(employees);
+    this.setState({
+      employees: employees
+    });
+  };
+
+  /** @abstract After employees have been fetched, sorts them.
+   * NEED TO CHECK WITH REAL DATA FOR ASYNC REQUEST
+   */
+  componentDidMount = () => {
+    this.filterAndSortEmployees(
+      this.state.filterText,
+      this.state.sortingOption
+    );
+  };
+
+  render = () => {
+    const props = this.props;
     const upperLimit = this.state.currentPage * TOTAL_EMPS_PER_PAGE;
-    const lowerLevel = upperLimit === TOTAL_EMPS_PER_PAGE ? 0 : upperLimit - TOTAL_EMPS_PER_PAGE;
-    const filteredEmployees = employees.filter(
+    const lowerLevel =
+      upperLimit === TOTAL_EMPS_PER_PAGE ? 0 : upperLimit - TOTAL_EMPS_PER_PAGE;
+    const filteredEmployees = this.state.filteredEmployees.filter(
       (employee, index) => index >= lowerLevel && index < upperLimit
     );
     const employeeRows = filteredEmployees.map((employee, index) => {
       return (
         <tr
-          className={
-            `calendar-search-emp-row ${ this.state.selectedEmployee !== null &&
-            this.state.selectedEmployee.sapId === employee.sapId ? "active" : ""
+          className={`calendar-search-emp-row ${
+            this.state.selectedEmployee !== null &&
+            this.state.selectedEmployee.sapId === employee.sapId
+              ? "active"
+              : ""
           }`}
           key={index}
           onClick={() => this.selectEmployee(employee)}
         >
-          <td>{(this.state.currentPage - 1) * TOTAL_EMPS_PER_PAGE + index + 1}</td>
+          <td>
+            {(this.state.currentPage - 1) * TOTAL_EMPS_PER_PAGE + index + 1}
+          </td>
           <td>{employee.employeeName}</td>
           <td>{employee.sapId}</td>
           <td>{employee.email}</td>
@@ -137,13 +219,21 @@ class CalendarSearchEmpModal extends Component {
     });
     const pages = [];
     const initialPage =
-      this.state.currentPage === 1 ? this.state.currentPage : this.state.currentPage - 1; //Starts with 1 if initialPage == 1 else currentPage - 1
+      this.state.currentPage === 1
+        ? this.state.currentPage
+        : this.state.currentPage - 1; //Starts with 1 if initialPage == 1 else currentPage - 1
     const endPage =
-      this.state.totalPages - initialPage >= 3 ? initialPage + 2 : this.state.totalPages; //Should be initialPage+2 if endPages - initialPage >= 3 else enPages
+      this.state.totalPages - initialPage >= 3
+        ? initialPage + 2
+        : this.state.totalPages; //Should be initialPage+2 if endPages - initialPage >= 3 else enPages
     for (let i = initialPage; i <= endPage; i++) {
       pages.push(
         <PaginationItem onClick={() => this.changePage(i)} key={i}>
-          <PaginationLink className={this.state.currentPage === i ? "calendar-page-active" : ""}>
+          <PaginationLink
+            className={
+              this.state.currentPage === i ? "calendar-page-active" : ""
+            }
+          >
             {i}
           </PaginationLink>
         </PaginationItem>
@@ -176,7 +266,7 @@ class CalendarSearchEmpModal extends Component {
             <Col sm="1">
               <span>Search</span>
             </Col>
-            <Col sm="11">
+            <Col sm="6">
               <input
                 type="text"
                 name="filterText"
@@ -184,6 +274,37 @@ class CalendarSearchEmpModal extends Component {
                 value={this.state.filterText}
                 onChange={event => this.handleFilterTextChange(event)}
               />
+            </Col>
+            <Col sm="5">
+              <Row>
+                <Col className="calendar-search-panel-sorting-option" sm="2">
+                  <span>Sort by:</span>
+                </Col>
+                <Col className="calendar-search-panel-sorting-option" sm="2">
+                  <input
+                    type="radio"
+                    name="sorting"
+                    value="name"
+                    checked={this.state.sortingOption === "name"}
+                    onChange={this.onSortingOptionChange}
+                  />
+                </Col>
+                <Col className="calendar-search-panel-sorting-option" sm="2">
+                  <span>Name</span>
+                </Col>
+                <Col className="calendar-search-panel-sorting-option" sm="2">
+                  <input
+                    type="radio"
+                    name="sorting"
+                    value="sapid"
+                    checked={this.state.sortingOption === "sapid"}
+                    onChange={this.onSortingOptionChange}
+                  />
+                </Col>
+                <Col className="calendar-search-panel-sorting-option" sm="2">
+                  <span>SapID</span>
+                </Col>
+              </Row>
             </Col>
           </Row>
 
@@ -215,7 +336,10 @@ class CalendarSearchEmpModal extends Component {
         </ModalBody>
 
         <ModalFooter>
-          <Button color="success" onClick={() => this.accept(this.state.selectedEmployee)}>
+          <Button
+            color="success"
+            onClick={() => this.accept(this.state.selectedEmployee)}
+          >
             Accept
           </Button>{" "}
           <Button color="danger" onClick={props.toggle}>
@@ -224,7 +348,7 @@ class CalendarSearchEmpModal extends Component {
         </ModalFooter>
       </Modal>
     );
-  }
+  };
 }
 
 CalendarSearchEmpModal.propTypes = {

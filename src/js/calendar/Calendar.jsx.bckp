@@ -17,9 +17,6 @@ import {
 } from "../../constants/util";
 import PopUpLoading from "../util/PopUpLoading";
 
-import * as empCalendar from "../../../responses/calendar.json";
-// import * as empCalendar from "../../../responses/calendar1.json";
-
 import "../../css/calendar/calendar.css";
 
 class Calendar extends Component {
@@ -27,12 +24,11 @@ class Calendar extends Component {
     super(props);
 
     this.state = {
-      calendarEmployee:
-        this.props.user.role === ADMIN_USER ? null : this.props.user,
+      calendarEmployee: this.props.user.role === ADMIN_USER ? null : this.props.user,
       month: null, //Days of month CHANGE
       empCalendarsRegistered: null, //Registered calendars by employee
       holidays: {},
-      isEditableMonth: false,
+      isPastMonth: false,
       //selectedMonth: new Date().getMonth() + 1, //Next month
       selectedMonth: new Date().getMonth(), //Actual month
       selectedYear: new Date().getFullYear(),
@@ -47,7 +43,8 @@ class Calendar extends Component {
   /** @abstract Calls component's fillMonth method, before the component is mounted.
    */
   componentWillMount = () => {
-    //this.fillMonth();
+    this.fillMonth();
+
     /*get(GET_HOLIDAYS_URL, { params: { year: this.state.selectedYear } }, ).then((res) => {
       const holidays = {};
       if (typeof(res.data) != undefined) {
@@ -96,29 +93,20 @@ class Calendar extends Component {
     this.updateCalendars();
   };
 
-  isNonWorkableDay = (
-    day,
-    month = this.state.selectedMonth,
-    year = this.state.selectedYear
-  ) => {
+  isNonWorkableDay = (day, month = this.state.selectedMonth, year = this.state.selectedYear) => {
     return (
       this.state.holidays.hasOwnProperty(year) &&
       this.state.holidays[year].hasOwnProperty(month) &&
       this.state.holidays[year][month].hasOwnProperty(day) &&
-      this.state.holidays[year][month][day].holidaysInfo[0].type ===
-        "Non-workable day"
+      this.state.holidays[year][month][day].holidaysInfo[0].type === "Non-workable day"
     );
   };
 
-  checkIfIsEditableMonth = (month, year) => {
+  checkIfIsPastMonth = (month, year) => {
     const date = new Date();
     const actualYear = date.getFullYear();
     const actualMonth = date.getMonth();
-    return (
-      (year === actualYear && actualMonth - 1 <= month) ||
-      (year + 1 === actualYear && month === 11 && actualMonth === 0) ||
-      year > actualYear
-    );
+    return (actualYear === year && actualMonth > month) || actualYear > year;
   };
 
   /** @abstract Fills state month using the employee's data. If employee's data is empty
@@ -130,57 +118,62 @@ class Calendar extends Component {
   fillMonth = (
     month = this.state.selectedMonth,
     year = this.state.selectedYear,
-    empCalendarsRegistered = this.state.empCalendarsRegistered,
     holidays = this.state.holidays
   ) => {
     const monthCalendar = [];
-    const currentEmpCalendar = empCalendarsRegistered
-      ? empCalendarsRegistered.find(
-          calendar => parseInt(calendar.month) === month
-        )
-      : undefined;
     let dayType;
-    for (let i = 0; i < DAYS_IN_MONTH; i++) {
-      dayType = null;
-      if (this.isNonWorkableDay(i + 1, month, year)) {
-        dayType = DAY_TYPE["HOLIDAY"];
-      } else if (
-        currentEmpCalendar !== undefined &&
-        currentEmpCalendar.days[i].value !== ""
-      ) {
-        for (let key in DAY_TYPE) {
-          if (DAY_TYPE[key].symbol === currentEmpCalendar.days[i].value) {
-            dayType = DAY_TYPE[key];
-            break;
+    if (this.state.empCalendarsRegistered) {
+      const currentMonth = this.state.empCalendarsRegistered.find(
+        calendar => parseInt(calendar.month) === month
+      );
+      let dayDesc;
+      for (let i = 0; i < DAYS_IN_MONTH; i++) {
+        dayDesc = null;
+        if (this.isNonWorkableDay(i + 1, month, year)) {
+          dayDesc = DAY_TYPE["HOLIDAY"];
+        } else if (currentMonth !== undefined && currentMonth.days[i].value !== "") {
+          //Searches day in day_types
+          for (let key in DAY_TYPE) {
+            if (DAY_TYPE[key].symbol === currentMonth.days[i].value) {
+              dayDesc = DAY_TYPE[key];
+              break;
+            }
           }
         }
+        dayType =
+          dayDesc !== null
+            ? dayDesc
+            : {
+                symbol: "",
+                name: "",
+                description: ""
+              };
+        monthCalendar.push(dayType);
       }
-      monthCalendar.push(
-        dayType !== null
-          ? dayType
-          : {
-              symbol: "",
-              name: "",
-              description: ""
-            }
-      );
+    } else {
+      for (let i = 1; i <= DAYS_IN_MONTH; i++) {
+        if (/*holidays !== {} && */ this.isNonWorkableDay(i)) {
+          dayType = DAY_TYPE["HOLIDAY"];
+        } else {
+          dayType = { symbol: "", name: "", description: "" };
+        }
+
+        monthCalendar.push(dayType);
+      }
     }
 
     this.setState({
-      isEditableMonth: this.checkIfIsEditableMonth(month, year),
+      isPastMonth: this.checkIfIsPastMonth(month, year),
       month: monthCalendar
     });
+    //console.log(month);
   };
 
   /** @abstract Validates that state's month is all filled up.
    * @returns {boolean} True if the period of time was filled correctly, false otherwise
    */
   validateMonth = () => {
-    const totalDays = new Date(
-      this.state.selectedYear,
-      this.state.selectedMonth + 1,
-      0
-    ).getDate();
+    const totalDays = new Date(this.state.selectedYear, this.state.selectedMonth + 1, 0).getDate();
     const month = this.state.month;
     for (let i = 0; i < totalDays; i++) {
       if (month[i].symbol === "") {
@@ -221,19 +214,14 @@ class Calendar extends Component {
     if (year !== this.state.selectedYear) {
       const date = new Date();
       let month;
-      if (
-        year === date.getFullYear() &&
-        this.state.selectedMonth > date.getMonth()
-      ) {
+      if (year === date.getFullYear() && this.state.selectedMonth > date.getMonth()) {
         month = date.getMonth();
       } else if (year !== this.state.selectedYear) {
         if (this.state.empCalendarsRegistered === null) {
           month = 0;
         } else {
           const calendars = this.state.empCalendarsRegistered;
-          const calendar = calendars.find(
-            calendar => parseInt(calendar.year) === year
-          );
+          const calendar = calendars.find(calendar => parseInt(calendar.year) === year);
           if (calendar === undefined) {
             month = 0;
           } else {
@@ -320,35 +308,20 @@ class Calendar extends Component {
 
   /** @abstract Updates state's empCalendarsRegistered.
    * It retrieves a list of calendars from server.
+   * If employee doesn't have calendars, state's month is set to null.
    * @param {object} employee Represents the actual employee. If not given,
    * the app uses state's calendarEmployee
    */
   updateCalendars = (employee = this.state.calendarEmployee) => {
     if (employee !== null) {
-      const registeredCalendars = [];
-      const date = new Date();
-      const year = date.getFullYear(),
-        month = date.getMonth();
-      //CHANGE with real response
-      for (let i = 0; i < Object.keys(empCalendar).length - 1; i++) {
-        registeredCalendars.push(empCalendar[i]);
-      }
-      this.fillMonth(month, year, registeredCalendars); //Fill with actual month data
       this.setState({
-        empCalendarsRegistered: registeredCalendars, //Array
-        selectedMonth: month, //Actual month
-        selectedYear: year,
-        loading: false
-      });
-
-      /*this.setState({
         empCalendarsRegistered: [], //Array
         selectedMonth: new Date().getMonth(), //Actual month
         selectedYear: new Date().getFullYear(),
         loading: false
-      });*/
+      });
       //this.fillMonth(new Date().getMonth() + 1); //Fill with next month data
-      //this.fillMonth(new Date().getMonth()); //Fill with actual month data
+      this.fillMonth(new Date().getMonth()); //Fill with actual month data
 
       /*let calendar = {
         sapId: employee.sapId
@@ -386,7 +359,8 @@ class Calendar extends Component {
   searchInEmpCalendars = (month, year) => {
     return this.state.empCalendarsRegistered.findIndex(
       currentCalendar =>
-        currentCalendar.month === month && currentCalendar.year === year
+        currentCalendar.month.toString() === month.toString() &&
+        currentCalendar.year.toString() === year.toString()
     );
   };
 
@@ -399,10 +373,7 @@ class Calendar extends Component {
    */
   updateEmployeeCalendars = calendar => {
     const empCalendarsRegistered = this.state.empCalendarsRegistered;
-    const calendarIndex = this.searchInEmpCalendars(
-      calendar.month,
-      calendar.year
-    );
+    const calendarIndex = this.searchInEmpCalendars(calendar.month, calendar.year);
     //If calendar exists, overwrite it
     if (calendarIndex !== -1) {
       return [
@@ -416,7 +387,7 @@ class Calendar extends Component {
   };
 
   submitMonth = () => {
-    if (this.validateMonth() && this.state.isEditableMonth) {
+    if (this.validateMonth() && !this.state.isPastMonth) {
       const totalDays = new Date(
         this.state.selectedYear,
         this.state.selectedMonth + 1,
@@ -446,9 +417,7 @@ class Calendar extends Component {
               alerts: true,
               typeAlert: "success",
               uploading: false,
-              empCalendarsRegistered: this.updateEmployeeCalendars(
-                calendarPayload
-              )
+              empCalendarsRegistered: this.updateEmployeeCalendars(calendarPayload)
             });
           } else {
             this.setState({
@@ -491,20 +460,13 @@ class Calendar extends Component {
     let alerts;
     if (this.state.alerts) {
       if (this.state.typeAlert === "success") {
-        alerts = (
-          <Alert color="success"> Shift calendar saved successfully! </Alert>
-        );
+        alerts = <Alert color="success"> Shift calendar saved successfully! </Alert>;
       } else if (this.state.typeAlert === "error") {
         alerts = (
-          <Alert color="danger">
-            {" "}
-            Error trying to save your calendar, please try again!{" "}
-          </Alert>
+          <Alert color="danger"> Error trying to save your calendar, please try again! </Alert>
         );
       } else if (this.state.typeAlert === "warning") {
-        alerts = (
-          <Alert color="warning"> Warning, we cannot connect to Server! </Alert>
-        );
+        alerts = <Alert color="warning"> Warning, we cannot connect to Server! </Alert>;
       }
     }
 
@@ -526,8 +488,7 @@ class Calendar extends Component {
           <React.Fragment />
         )}
 
-        {this.state.calendarEmployee !== null &&
-        this.state.empCalendarsRegistered !== null ? (
+        {this.state.calendarEmployee !== null && this.state.empCalendarsRegistered !== null ? (
           <React.Fragment>
             <CalendarUserPanel
               registeredCalendars={this.state.empCalendarsRegistered}
@@ -545,7 +506,7 @@ class Calendar extends Component {
                   isNonWorkableDay={this.isNonWorkableDay}
                   month={this.state.selectedMonth}
                   monthTypes={this.state.month}
-                  isPastMonth={!this.state.isEditableMonth}
+                  isPastMonth={this.state.isPastMonth}
                   setDayType={this.setDayType}
                   year={this.state.selectedYear}
                 />
@@ -558,7 +519,7 @@ class Calendar extends Component {
                   color="primary"
                   size="lg"
                   onClick={this.saveMonth}
-                  disabled={!this.state.isEditableMonth}
+                  disabled={this.state.isPastMonth}
                 >
                   Save
                 </Button>{" "}
@@ -566,7 +527,7 @@ class Calendar extends Component {
                   color="success"
                   size="lg"
                   onClick={this.submitMonth}
-                  disabled={!this.state.isEditableMonth}
+                  disabled={this.state.isPastMonth}
                 >
                   Submit
                 </Button>{" "}
@@ -577,9 +538,7 @@ class Calendar extends Component {
               <PopUpLoading
                 className="uploading-modal"
                 isOpen={this.state.uploading || this.state.loading}
-                modalTitle={`${
-                  this.state.loading ? "Loading" : "Submitting"
-                } calendar`}
+                modalTitle={`${this.state.loading ? "Loading" : "Submitting"} calendar`}
               >
                 <div className="calendar-loading">
                   <img

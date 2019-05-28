@@ -1,0 +1,23 @@
+{  
+  "projectName":"Attendance ",
+  "projectCode":"001",
+  "reportingManager":"12345678",
+  "sapId":"99999999",
+  "batchNumber":"000",
+  "employeeName":"Admin",
+  "email":"admin@hcl.com",
+  "password":"admin",
+  "role":"1",
+  "client":"HCL",
+  "workLocation":"Vista Acueducto",
+  "employeeStatus":"Local-nativo",
+  "secureQuestions":[  
+     "What is your favorite movie?",
+     "What is your pet’s name?"
+  ],
+  "secureAnswers":[  
+     "attendance",
+     "attendance"
+  ],
+  "status":"active"
+}
