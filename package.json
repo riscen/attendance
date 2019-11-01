@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "blob": "0.0.5",
     "core-js": "2.5.7",
     "feather-icons-react": "^0.3.0",
